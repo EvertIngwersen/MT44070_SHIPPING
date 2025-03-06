@@ -5,6 +5,7 @@ Created on Thu Mar  6 12:42:53 2025
 @author: evert
 """
 
+
 import pandas as pd
 import numpy as np
 import json
@@ -53,8 +54,11 @@ def find_and_store_costs(labels, result_dict, sheet_path, sheet_name):
     
     return result_dict
 
-# Path to the folder containing the Excel files
-folder_path = r"C:\Users\evert\Documents\TU-Delft\TIL Master\MT44070 Shipping Management\MT44070_REPO\MT44070_SHIPPING\Vessels_DATA"
+# Get the current working directory
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
+# Define the relative path to the "Vessels_DATA" folder
+vessel_data_folder = os.path.join(current_directory, 'Vessels_DATA')
 
 # List of labels to search for
 labels_total_ship_costs = [
@@ -84,13 +88,13 @@ label_voyage_costs = [
 all_models_data = {}
 
 # Loop through all the Excel files in the folder
-for file_name in os.listdir(folder_path):
+for file_name in os.listdir(vessel_data_folder):
     if file_name.endswith(".xlsx"):  # Ensure it's an Excel file
         # Extract model number (TEU capacity) from the file name
         model_number = file_name.split(".")[0]  # Assumes the name is something like MODEL_23964
         
         # Full path to the current Excel file
-        file_path = os.path.join(folder_path, file_name)
+        file_path = os.path.join(vessel_data_folder, file_name)
 
         # Initialize dictionaries for storing results for the current model
         Total_ship_costs = {}
@@ -112,13 +116,16 @@ for file_name in os.listdir(folder_path):
 # Print the final dictionary containing data for all models
 print(all_models_data)
 
-output_file_path = r"C:\Users\evert\Documents\TU-Delft\TIL Master\MT44070 Shipping Management\MT44070_REPO\MT44070_SHIPPING\Vessels_DATA\all_models_data.json"
+# Define the output file path dynamically within the "Vessels_DATA" folder
+output_file_path = os.path.join(vessel_data_folder, 'all_models_data.json')
 
+# Save the dictionary to a JSON file
 with open(output_file_path, 'w') as json_file:
     json.dump(all_models_data, json_file, indent=4)
 
 print("")
 print(f"Data saved to {output_file_path}")
+
     
 
 
