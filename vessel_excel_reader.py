@@ -129,6 +129,7 @@ print(f"Data saved to {output_file_path}")
 
 #final commit message
     
+# Function to extract cost data from JSON
 def extract_cost_data(json_data, cost_category):
     """
     Extracts cost data for a given category from the JSON data.
@@ -170,10 +171,14 @@ total_cost_data = extract_cost_data(all_models_data, "Total_ship_costs")
 running_cost_data = extract_cost_data(all_models_data, "Running_costs")
 voyage_cost_data = extract_cost_data(all_models_data, "Voyage_costs")
 
+# Create a "Plots" folder inside "Vessels_DATA"
+plots_folder = os.path.join(vessel_data_folder, 'Plots')
+os.makedirs(plots_folder, exist_ok=True)  # Create the folder if it doesn't exist
+
 # Function to plot costs
 def plot_costs(cost_data, category_name):
     """
-    Plots cost data for each label.
+    Plots cost data for each label and saves the plots in the "Plots" folder.
 
     Args:
         cost_data (dict): Dictionary where keys are cost labels and values are lists of (TEU, cost) tuples.
@@ -194,20 +199,21 @@ def plot_costs(cost_data, category_name):
         plt.title(f"{label} ({category_name})")
         plt.grid(True)
 
-        # Save plot
+        # Save plot in "Plots" folder
         plot_filename = f"{label.replace(' ', '_')}_{category_name}.png"
-        plot_path = os.path.join(vessel_data_folder, plot_filename)
+        plot_path = os.path.join(plots_folder, plot_filename)
         plt.savefig(plot_path, bbox_inches='tight')
         plt.close()
 
         print(f"Saved plot: {plot_path}")
 
-# Generate plots
+# Generate plots and save them in "Plots" folder
 plot_costs(total_cost_data, "Total_ship_costs")
 plot_costs(running_cost_data, "Running_costs")
 plot_costs(voyage_cost_data, "Voyage_costs")
 
-print("\nAll plots have been generated and saved in the Vessels_DATA folder.")
+print("\nAll plots have been generated and saved in the 'Plots' folder inside 'Vessels_DATA'.")
+
 
 
 
