@@ -11,6 +11,11 @@ import numpy as np
 path = r"C:\Users\evert\Documents\TU-Delft\TIL Master\MT44070 Shipping Management\MT44070_REPO\MT44070_SHIPPING\Vessels_DATA\MODEL_23964.xlsx"
 df = pd.read_excel(path, sheet_name="CostShip") 
 
+
+# Dictionary to store results
+result = {}
+
+# Find all occurrences of "Running Cost Ship"
 cell_location = df.isin(["Running Cost Ship"])  # Boolean mask
 
 # Flag to check if a valid value is found
@@ -24,7 +29,7 @@ for row in range(len(df)):
             
             # Check if the next cell is a number (integer or float)
             if isinstance(next_cell, (int, float)) and not np.isnan(next_cell):
-                print("Value next to 'Running Cost Ship':", next_cell)
+                result["Running_cost_value"] = next_cell  # Store in dictionary
                 found_value = True
                 break  # Stop after finding the first valid one
     else:
@@ -33,5 +38,11 @@ for row in range(len(df)):
 
 # If no valid value is found
 if not found_value:
-    print("No valid value found next to 'Running Cost Ship'.")
+    result["Running_cost_value"] = None  # No valid value found
+
+# Print result
+print(result)
+    
+    
+
     
