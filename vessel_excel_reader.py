@@ -7,6 +7,7 @@ Created on Thu Mar  6 12:42:53 2025
 
 import pandas as pd
 import numpy as np
+import os
 
 def find_and_store_costs(labels, result_dict, sheet_path, sheet_name):
     """
@@ -50,8 +51,6 @@ def find_and_store_costs(labels, result_dict, sheet_path, sheet_name):
             result_dict[label] = None
     
     return result_dict
-
-
 
 path = r"C:\Users\evert\Documents\TU-Delft\TIL Master\MT44070 Shipping Management\MT44070_REPO\MT44070_SHIPPING\Vessels_DATA\MODEL_23964.xlsx"
 
