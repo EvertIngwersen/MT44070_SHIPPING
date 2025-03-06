@@ -7,6 +7,7 @@ Created on Thu Mar  6 12:42:53 2025
 
 import pandas as pd
 import numpy as np
+import json
 import os
 
 def find_and_store_costs(labels, result_dict, sheet_path, sheet_name):
@@ -111,7 +112,13 @@ for file_name in os.listdir(folder_path):
 # Print the final dictionary containing data for all models
 print(all_models_data)
 
+output_file_path = r"C:\Users\evert\Documents\TU-Delft\TIL Master\MT44070 Shipping Management\MT44070_REPO\MT44070_SHIPPING\Vessels_DATA\all_models_data.json"
 
+with open(output_file_path, 'w') as json_file:
+    json.dump(all_models_data, json_file, indent=4)
+
+print("")
+print(f"Data saved to {output_file_path}")
     
 
 
