@@ -52,8 +52,10 @@ def find_and_store_costs(labels, result_dict, sheet_path, sheet_name):
     
     return result_dict
 
-path = r"C:\Users\evert\Documents\TU-Delft\TIL Master\MT44070 Shipping Management\MT44070_REPO\MT44070_SHIPPING\Vessels_DATA\MODEL_23964.xlsx"
+# Path to the folder containing the Excel files
+folder_path = r"C:\Users\evert\Documents\TU-Delft\TIL Master\MT44070 Shipping Management\MT44070_REPO\MT44070_SHIPPING\Vessels_DATA"
 
+# List of labels to search for
 labels_total_ship_costs = [
     "Running cost ship", 
     "Voyage cost ship", 
@@ -76,23 +78,39 @@ label_voyage_costs = [
     "External cost",
     "ETS cost ship",
     "Cannel cost ship"]
-    
-Running_costs = {}
-Voyage_costs = {}
-Total_ship_costs = {}
 
+# Dictionary to store all data for each model
+all_models_data = {}
 
+# Loop through all the Excel files in the folder
+for file_name in os.listdir(folder_path):
+    if file_name.endswith(".xlsx"):  # Ensure it's an Excel file
+        # Extract model number (TEU capacity) from the file name
+        model_number = file_name.split(".")[0]  # Assumes the name is something like MODEL_23964
+        
+        # Full path to the current Excel file
+        file_path = os.path.join(folder_path, file_name)
 
-Total_ship_costs = find_and_store_costs(labels_total_ship_costs, Total_ship_costs, path, "CostShip")
-Running_costs = find_and_store_costs(labels_running_costs, Running_costs, path, "CostShip")
-Voyage_costs = find_and_store_costs(label_voyage_costs, Voyage_costs, path, "CostShip")
+        # Initialize dictionaries for storing results for the current model
+        Total_ship_costs = {}
+        Running_costs = {}
+        Voyage_costs = {}
 
+        # Call the function for each category
+        Total_ship_costs = find_and_store_costs(labels_total_ship_costs, Total_ship_costs, file_path, "CostShip")
+        Running_costs = find_and_store_costs(labels_running_costs, Running_costs, file_path, "CostShip")
+        Voyage_costs = find_and_store_costs(label_voyage_costs, Voyage_costs, file_path, "CostShip")
 
-print(Total_ship_costs)
-print("")
-print(Running_costs)
-print("")
-print(Voyage_costs)
+        # Store the results in the dictionary for the current model
+        all_models_data[model_number] = {
+            "Total_ship_costs": Total_ship_costs,
+            "Running_costs": Running_costs,
+            "Voyage_costs": Voyage_costs
+        }
+
+# Print the final dictionary containing data for all models
+print(all_models_data)
+
 
     
 
