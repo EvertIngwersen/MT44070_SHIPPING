@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import json
 import os
+import matplotlib.pyplot as plt
 
 def find_and_store_costs(labels, result_dict, sheet_path, sheet_name):
     """
@@ -128,7 +129,85 @@ print(f"Data saved to {output_file_path}")
 
 #final commit message
     
+def extract_cost_data(json_data, cost_category):
+    """
+    Extracts cost data for a given category from the JSON data.
 
+    Args:
+        json_data (dict): Dictionary containing cost data for different ship models.
+        cost_category (str): The cost category to extract (Total_ship_costs, Running_costs, or Voyage_costs).
+
+    Returns:
+        dict: Dictionary where keys are cost labels and values are lists of (TEU, cost) tuples.
+    """
+    cost_data = {}
+
+    for model, data in json_data.items():
+        teu = int(model.split("_")[-1])  # Extract TEU from model name
+
+        for label, cost in data[cost_category].items():
+            if label not in cost_data:
+                cost_data[label] = []
+            if cost is not None:  # Ignore None values
+                cost_data[label].append((teu, cost))
+
+    # Sort each label's data by TEU (ensures x-axis is ordered correctly)
+    for label in cost_data:
+        cost_data[label] = sorted(cost_data[label], key=lambda x: x[0])
+
+    return cost_data
+
+# Load JSON data
+current_directory = os.path.dirname(os.path.abspath(__file__))
+vessel_data_folder = os.path.join(current_directory, 'Vessels_DATA')
+json_file_path = os.path.join(vessel_data_folder, 'all_models_data.json')
+
+with open(json_file_path, 'r') as json_file:
+    all_models_data = json.load(json_file)
+
+# Extract data for each category
+total_cost_data = extract_cost_data(all_models_data, "Total_ship_costs")
+running_cost_data = extract_cost_data(all_models_data, "Running_costs")
+voyage_cost_data = extract_cost_data(all_models_data, "Voyage_costs")
+
+# Function to plot costs
+def plot_costs(cost_data, category_name):
+    """
+    Plots cost data for each label.
+
+    Args:
+        cost_data (dict): Dictionary where keys are cost labels and values are lists of (TEU, cost) tuples.
+        category_name (str): The name of the cost category (used for titles and file names).
+    """
+    for label, values in cost_data.items():
+        if not values:
+            continue  # Skip empty labels
+
+        # Extract TEU values and costs
+        teus, costs = zip(*values)
+
+        # Create plot
+        plt.figure(figsize=(8, 5))
+        plt.plot(teus, costs, marker='o', linestyle='-', color='b')
+        plt.xlabel("Ship Model (TEU)")
+        plt.ylabel("Cost")
+        plt.title(f"{label} ({category_name})")
+        plt.grid(True)
+
+        # Save plot
+        plot_filename = f"{label.replace(' ', '_')}_{category_name}.png"
+        plot_path = os.path.join(vessel_data_folder, plot_filename)
+        plt.savefig(plot_path, bbox_inches='tight')
+        plt.close()
+
+        print(f"Saved plot: {plot_path}")
+
+# Generate plots
+plot_costs(total_cost_data, "Total_ship_costs")
+plot_costs(running_cost_data, "Running_costs")
+plot_costs(voyage_cost_data, "Voyage_costs")
+
+print("\nAll plots have been generated and saved in the Vessels_DATA folder.")
 
 
 
