@@ -15,34 +15,37 @@ df = pd.read_excel(path, sheet_name="CostShip")
 # Dictionary to store results
 result = {}
 
-# Find all occurrences of "Running Cost Ship"
-cell_location = df.isin(["Running Cost Ship"])  # Boolean mask
+# List of target labels to search for
+labels = ["Running cost ship", "Voyage cost s hip", "Port handling cost ship", "Fixed cost ship"]
 
-# Flag to check if a valid value is found
-found_value = False
-
-# Iterate over matching locations
-for row in range(len(df)):
-    for col in range(len(df.columns) - 1):  # Avoid out-of-bounds error
-        if cell_location.iloc[row, col]:  # If "Running Cost Ship" found
-            next_cell = df.iloc[row, col + 1]  # Value next to it
-            
-            # Check if the next cell is a number (integer or float)
-            if isinstance(next_cell, (int, float)) and not np.isnan(next_cell):
-                result["Running_cost_value"] = next_cell  # Store in dictionary
-                found_value = True
-                break  # Stop after finding the first valid one
-    else:
-        continue
-    break  # Exit outer loop if a valid match is found
-
-# If no valid value is found
-if not found_value:
-    result["Running_cost_value"] = None  # No valid value found
+# Iterate through each label and search for its value
+for label in labels:
+    # Find all occurrences of the label
+    cell_location = df.isin([label])  # Boolean mask
+    found_value = False
+    
+    # Iterate over matching locations
+    for row in range(len(df)):
+        for col in range(len(df.columns) - 1):  # Avoid out-of-bounds error
+            if cell_location.iloc[row, col]:  # If label found
+                next_cell = df.iloc[row, col + 1]  # Value next to it
+                
+                # Check if the next cell is a number (integer or float)
+                if isinstance(next_cell, (int, float)) and not np.isnan(next_cell):
+                    result[label] = float(next_cell)  # Store value as float in the result
+                    found_value = True
+                    break  # Stop after finding the first valid one
+        if found_value:
+            break  # Exit outer loop if a valid match is found
+    
+    # If no valid value is found, store None for that label
+    if not found_value:
+        print("No value found for:", label)
+        print("")
+        result[label] = None
 
 # Print result
 print(result)
-    
     
 
     
