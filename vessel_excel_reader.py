@@ -52,21 +52,48 @@ def find_and_store_costs(labels, result_dict, sheet_path, sheet_name):
     return result_dict
 
 
-# Example usage:
+
 path = r"C:\Users\evert\Documents\TU-Delft\TIL Master\MT44070 Shipping Management\MT44070_REPO\MT44070_SHIPPING\Vessels_DATA\MODEL_23964.xlsx"
+
 labels_total_ship_costs = [
     "Running cost ship", 
     "Voyage cost ship", 
     "Port handling cost ship", 
     "Fixed cost ship"
 ]
+
+labels_running_costs = [
+    "Manning cost ship",
+    "Store cost",
+    "Insurance cost",
+    "Repair and Maintainance cost",
+    "Management cost"]
+
+label_voyage_costs = [
+    "Fuel cost ship ports",
+    "Fuel cost ship ECA",
+    "Fuel cost ship NON ECA",
+    "Lub oil cost ship",
+    "External cost",
+    "ETS cost ship",
+    "Cannel cost ship"]
+    
+Running_costs = {}
+Voyage_costs = {}
 Total_ship_costs = {}
 
-# Call the function to populate the dictionary with values
-Total_ship_costs = find_and_store_costs(labels_total_ship_costs, Total_ship_costs, path, "CostShip")
 
-# Print the result
+
+Total_ship_costs = find_and_store_costs(labels_total_ship_costs, Total_ship_costs, path, "CostShip")
+Running_costs = find_and_store_costs(labels_running_costs, Running_costs, path, "CostShip")
+Voyage_costs = find_and_store_costs(label_voyage_costs, Voyage_costs, path, "CostShip")
+
+
 print(Total_ship_costs)
+print("")
+print(Running_costs)
+print("")
+print(Voyage_costs)
 
     
 
