@@ -13,13 +13,17 @@ df = pd.read_excel(path, sheet_name="CostShip")
 
 
 # Dictionary to store results
-result = {}
+Total_ship_costs = {}
 
 # List of target labels to search for
-labels = ["Running cost ship", "Voyage cost s hip", "Port handling cost ship", "Fixed cost ship"]
+labels_total_ship_costs = ["Running cost ship", 
+          "Voyage cost ship", 
+          "Port handling cost ship", 
+          "Fixed cost ship"
+          ]
 
 # Iterate through each label and search for its value
-for label in labels:
+for label in labels_total_ship_costs:
     # Find all occurrences of the label
     cell_location = df.isin([label])  # Boolean mask
     found_value = False
@@ -32,7 +36,7 @@ for label in labels:
                 
                 # Check if the next cell is a number (integer or float)
                 if isinstance(next_cell, (int, float)) and not np.isnan(next_cell):
-                    result[label] = float(next_cell)  # Store value as float in the result
+                    Total_ship_costs[label] = float(next_cell)  # Store value as float in the result
                     found_value = True
                     break  # Stop after finding the first valid one
         if found_value:
@@ -42,10 +46,26 @@ for label in labels:
     if not found_value:
         print("No value found for:", label)
         print("")
-        result[label] = None
+        Total_ship_costs[label] = None
 
 # Print result
-print(result)
+print(Total_ship_costs)
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
