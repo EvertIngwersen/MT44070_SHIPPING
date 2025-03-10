@@ -293,7 +293,7 @@ plt.close()
 print(f"Bar chart saved in {bar_chart_path}")
 
 
-
+#------- ALTERNATIVE PROPULSION --------------------------------------------------#
 
 
 
