@@ -72,6 +72,25 @@ mpl.rcParams.update({
 # }
 
 
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+# Use a seaborn style
+plt.style.use('seaborn-v0_8-colorblind')
+
+# Customize rcParams for an Excel-like look
+mpl.rcParams.update({
+    'axes.facecolor': 'white',
+    'axes.edgecolor': 'black',
+    'grid.color': 'lightgray',
+    'grid.linestyle': '--',
+    'grid.linewidth': 0.5,
+    'font.family': 'Calibri',
+    'axes.titleweight': 'bold',
+    'axes.titlesize': 14,
+    'axes.labelsize': 12
+})
+
 # Provided data
 data = {
     "MODEL_23964_BASE": {
@@ -95,14 +114,13 @@ data = {
 # Function to compute percentage breakdown
 def compute_percentages(model_data):
     total_cost = sum(model_data["Total_ship_costs"].values())
-    percentages = {k: (v / total_cost) * 100 for k, v in model_data["Total_ship_costs"].items()}
-    return percentages
+    return {k: (v / total_cost) * 100 for k, v in model_data["Total_ship_costs"].items()}
 
 # Compute percentages
 base_percentages = compute_percentages(data["MODEL_23964_BASE"])
 lng_percentages = compute_percentages(data["MODEL_23964_LNG"])
 
-# Define models and categories
+# Define models, categories, and colors
 models = ["23964 TEU", "23964 TEU (LNG and Scrubber)"]
 categories = ["Running cost ship", "Voyage cost ship", "Port handling cost ship", "Fixed cost ship"]
 colors = {
@@ -113,28 +131,33 @@ colors = {
 }
 bar_width = 0.5
 
-fig, ax = plt.subplots()
+# Create the figure with a smaller size
+fig, ax = plt.subplots(figsize=(8, 6))
 
 # Initialize bottom values for stacking
-bottom_base = 0
-bottom_lng = 0
+bottom_base = [0, 0]  # For 23964 TEU and 23964 TEU (LNG)
+bars = []  # To store bar elements for the legend
 
 # Plot stacked bars
 for category in categories:
-    ax.bar(models[0], base_percentages[category], width=bar_width, label=category if bottom_base == 0 else "",
-           color=colors[category], bottom=bottom_base)
-    ax.bar(models[1], lng_percentages[category], width=bar_width, color=colors[category], bottom=bottom_lng)
+    bars.append(ax.bar(models, [base_percentages[category], lng_percentages[category]], 
+                        width=bar_width, label=category, color=colors[category], bottom=bottom_base))
     
-    # Update bottom values
-    bottom_base += base_percentages[category]
-    bottom_lng += lng_percentages[category]
+    # Update bottom values for stacking
+    bottom_base = [bottom_base[i] + val for i, val in enumerate([base_percentages[category], lng_percentages[category]])]
 
 # Customize the chart
-ax.set_ylabel("Percentage (%)")
-ax.set_title("Cost Breakdown by Propulsion Type")
-ax.legend()
+ax.set_ylabel("Percentage (%)", fontsize=12)
+ax.set_xlabel("Ship Type", fontsize=12)
+ax.set_title("Cost Breakdown by Propulsion Type", fontsize=14)
+ax.tick_params(axis='x', rotation=30, labelsize=10)
+ax.tick_params(axis='y', labelsize=10)
+
+# Add a proper legend with all cost categories
+ax.legend(title="Cost Components", loc="upper right", fontsize=10)
 
 # Save the figure
 save_path = r"C:\Users\evert\Documents\TU-Delft\TIL Master\MT44070 Shipping Management\MT44070_REPO\MT44070_SHIPPING\Vessels_DATA\Plots\cost_breakdown.png"
-plt.savefig(save_path)
+plt.savefig(save_path, dpi=300, bbox_inches="tight")
 plt.show()
+
