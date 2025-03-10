@@ -329,7 +329,33 @@ for file_name in os.listdir(alt_prop_data_folder):
             "Voyage_costs": Voyage_costs
         }
 
+# Save JSON file in "Vessel_DATA" (not in "VESSELS")
+output_file_path = os.path.join(current_directory, 'Vessels_DATA', 'alt_prop_data.json')
 
+with open(output_file_path, 'w') as json_file:
+    json.dump(alt_prop_models_data, json_file, indent=4)
+
+print(f"\nData saved to {output_file_path}")
+
+# Load JSON data
+with open(output_file_path, 'r') as json_file:
+    alt_prop_models_data = json.load(json_file)
+
+# Extract cost data
+total_cost_data_alt_prop = extract_cost_data(alt_prop_models_data, "Total_ship_costs")
+running_cost_data_alt_prop = extract_cost_data(alt_prop_models_data, "Running_costs")
+voyage_cost_data_alt_prop = extract_cost_data(alt_prop_models_data, "Voyage_costs")
+
+# Create a "Plots" folder inside "Vessel_DATA"
+plots_folder = os.path.join(current_directory, 'Vessels_DATA', 'Plots')
+os.makedirs(plots_folder, exist_ok=True)  
+
+# Generate plots
+plot_costs(total_cost_data_alt_prop, "Total_ship_costs_alt_prop")
+plot_costs(running_cost_data_alt_prop, "Running_costs_alt_prop")
+plot_costs(voyage_cost_data_alt_prop, "Voyage_costs_alt_prop")
+
+print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
 
 
 
