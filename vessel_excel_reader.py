@@ -164,7 +164,7 @@ print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
 
 def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
     """
-    Reads the specified sheet from the given Excel file and stores the data in a dictionary.
+    Reads a specific range (D6:N21) from the given Excel sheet and stores the data in a dictionary.
 
     Args:
         file_path (str): Path to the Excel file.
@@ -173,7 +173,11 @@ def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
     Returns:
         dict: Dictionary with column names as keys and lists of values.
     """
-    df = pd.read_excel(file_path, sheet_name=sheet_name)
+    # Read only the required range (D6:N21)
+    df = pd.read_excel(file_path, sheet_name=sheet_name, usecols="D:N", skiprows=5, nrows=16)
+
+    # Drop rows and columns with all NaN values
+    df = df.dropna(how="all").dropna(axis=1, how="all")
 
     # Convert DataFrame to dictionary format (column names as keys)
     cost_chain_data = df.to_dict(orient="list")
