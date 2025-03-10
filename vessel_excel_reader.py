@@ -8,6 +8,7 @@ Created on Thu Mar  6 12:42:53 2025
 import pandas as pd
 import numpy as np
 import json
+import seaborn as sns
 import os
 import matplotlib.pyplot as plt
 
@@ -162,6 +163,7 @@ plot_costs(voyage_cost_data, "Voyage_costs")
 print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
 
 
+
 def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
     """
     Reads a specific range (D6:N21) from the given Excel sheet and stores the data in a dictionary.
@@ -242,6 +244,78 @@ with open(output_lowest_cost_path, 'w') as json_file:
 
 print(f"\nData saved to {output_all_data_path} (sorted by TEU number).")
 print(f"Lowest cost chains saved to {output_lowest_cost_path} (sorted by TEU number).")
+
+# Create the output folder for the plots if it doesn't exist
+plots_folder = os.path.join(current_directory, 'Vessels_DATA', 'Plots', 'CHAIN_plots')
+os.makedirs(plots_folder, exist_ok=True)
+
+# Scatter Plot: TEU Number vs. Total Chain Cost
+total_cost_data = []
+for teu_number, data in sorted_chain_data.items():
+    total_cost = data.get("Total generalised chain cost", [None])[0]
+    if total_cost is not None:
+        total_cost_data.append([teu_number, total_cost])
+
+df_total_cost = pd.DataFrame(total_cost_data, columns=["TEU", "Total Chain Cost"])
+
+# Scatter plot of TEU number vs Total Chain Cost
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x="TEU", y="Total Chain Cost", data=df_total_cost, color='blue')
+plt.title('TEU Number vs. Total Chain Cost')
+plt.xlabel('TEU Number')
+plt.ylabel('Total Chain Cost')
+plt.grid(True)
+scatter_plot_path = os.path.join(plots_folder, 'TEU_vs_Total_Chain_Cost.png')
+plt.savefig(scatter_plot_path)
+plt.close()
+
+# Line Plot: TEU Number vs. Lowest Chain Cost
+lowest_cost_data = []
+for teu_number, data in sorted_lowest_cost_chains.items():
+    lowest_cost = data.get("Total generalised chain cost", None)
+    if lowest_cost is not None:
+        lowest_cost_data.append([teu_number, lowest_cost])
+
+df_lowest_cost = pd.DataFrame(lowest_cost_data, columns=["TEU", "Lowest Chain Cost"])
+
+# Line plot of TEU number vs Lowest Chain Cost
+plt.figure(figsize=(10, 6))
+sns.lineplot(x="TEU", y="Lowest Chain Cost", data=df_lowest_cost, marker='o', color='green')
+plt.title('TEU Number vs. Lowest Chain Cost')
+plt.xlabel('TEU Number')
+plt.ylabel('Lowest Chain Cost')
+plt.grid(True)
+line_plot_path = os.path.join(plots_folder, 'TEU_vs_Lowest_Chain_Cost.png')
+plt.savefig(line_plot_path)
+plt.close()
+
+# Pie Chart: Distribution of Lowest Chain Costs
+cost_ranges = ["< 1000", "1000 - 5000", "5000 - 10000", "> 10000"]
+cost_counts = {range_label: 0 for range_label in cost_ranges}
+
+# Assign each lowest chain cost to a range
+for teu_number, data in sorted_lowest_cost_chains.items():
+    lowest_cost = data.get("Total generalised chain cost", None)
+    if lowest_cost is not None:
+        if lowest_cost < 1000:
+            cost_counts["< 1000"] += 1
+        elif 1000 <= lowest_cost < 5000:
+            cost_counts["1000 - 5000"] += 1
+        elif 5000 <= lowest_cost < 10000:
+            cost_counts["5000 - 10000"] += 1
+        else:
+            cost_counts["> 10000"] += 1
+
+# Pie chart of lowest chain cost distribution
+plt.figure(figsize=(8, 8))
+plt.pie(cost_counts.values(), labels=cost_counts.keys(), autopct='%1.1f%%', colors=sns.color_palette("Set2"))
+plt.title('Distribution of Lowest Chain Costs by Range')
+pie_chart_path = os.path.join(plots_folder, 'Lowest_Chain_Cost_Distribution.png')
+plt.savefig(pie_chart_path)
+plt.close()
+
+print(f"Plots saved in {plots_folder}")
+
 
 
 
