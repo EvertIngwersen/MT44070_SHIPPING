@@ -299,13 +299,35 @@ print(f"Bar chart saved in {bar_chart_path}")
 alt_prop_data_folder = os.path.join(current_directory, 'Vessels_DATA', 'ALTERNATIVE_PROP')
 
 # Ensure the folder exists
-if not os.path.exists(vessel_data_folder):
-    raise FileNotFoundError(f"Error: The folder '{vessel_data_folder}' does not exist!")
+if not os.path.exists(alt_prop_data_folder):
+    raise FileNotFoundError(f"Error: The folder '{alt_prop_data_folder}' does not exist!")
 
 alt_prop_models_data = {}
 
 
+# Loop through all Excel files in the alt_prop_data_folder folder
+for file_name in os.listdir(alt_prop_data_folder):
+    if file_name.endswith(".xlsx"):  
+        model_number = file_name.split(".")[0]  
 
+        file_path = os.path.join(alt_prop_data_folder, file_name)
+
+        # Initialize dictionaries for storing results
+        Total_ship_costs = {}
+        Running_costs = {}
+        Voyage_costs = {}
+
+        # Extract cost data
+        Total_ship_costs = find_and_store_costs(labels_total_ship_costs, Total_ship_costs, file_path, "CostShip")
+        Running_costs = find_and_store_costs(labels_running_costs, Running_costs, file_path, "CostShip")
+        Voyage_costs = find_and_store_costs(label_voyage_costs, Voyage_costs, file_path, "CostShip")
+
+        # Store the results
+        alt_prop_models_data[model_number] = {
+            "Total_ship_costs": Total_ship_costs,
+            "Running_costs": Running_costs,
+            "Voyage_costs": Voyage_costs
+        }
 
 
 
