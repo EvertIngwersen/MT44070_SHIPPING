@@ -160,3 +160,72 @@ plot_costs(running_cost_data, "Running_costs")
 plot_costs(voyage_cost_data, "Voyage_costs")
 
 print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
+
+
+def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
+    """
+    Reads the specified sheet from the given Excel file and stores the data in a dictionary.
+
+    Args:
+        file_path (str): Path to the Excel file.
+        sheet_name (str): Name of the sheet containing cost chain data.
+
+    Returns:
+        dict: Dictionary with column names as keys and lists of values.
+    """
+    df = pd.read_excel(file_path, sheet_name=sheet_name)
+
+    # Convert DataFrame to dictionary format (column names as keys)
+    cost_chain_data = df.to_dict(orient="list")
+
+    return cost_chain_data
+
+# Get the current directory dynamically
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
+# Define the path to "Vessels_DATA\CHAIN"
+chain_folder = os.path.join(current_directory, 'Vessels_DATA', 'CHAIN')
+
+# Ensure the folder exists
+if not os.path.exists(chain_folder):
+    raise FileNotFoundError(f"Error: The folder '{chain_folder}' does not exist!")
+
+# Define the file path for MODEL_CHAIN_23964.xlsx
+file_path = os.path.join(chain_folder, 'MODEL_CHAIN_23964.xlsx')
+
+# Ensure the file exists
+if not os.path.exists(file_path):
+    raise FileNotFoundError(f"Error: The file '{file_path}' does not exist!")
+
+# Read the cost chain data
+cost_chain_data = read_cost_chain_data(file_path)
+
+# Print to verify
+print(cost_chain_data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
