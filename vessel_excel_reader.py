@@ -127,7 +127,6 @@ with open(output_file_path, 'w') as json_file:
 print("")
 print(f"Data saved to {output_file_path}")
 
-#final commit message
     
 # Function to extract cost data from JSON
 def extract_cost_data(json_data, cost_category):
