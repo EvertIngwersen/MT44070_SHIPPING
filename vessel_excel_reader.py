@@ -49,6 +49,68 @@ def find_and_store_costs(labels, result_dict, sheet_path, sheet_name):
 
     return result_dict
 
+# Function to extract cost data
+def extract_cost_data(json_data, cost_category):
+    cost_data = {}
+
+    for model, data in json_data.items():
+        teu = int(model.split("_")[-1])  
+
+        for label, cost in data[cost_category].items():
+            if label not in cost_data:
+                cost_data[label] = []
+            if cost is not None:  
+                cost_data[label].append((teu, cost))
+
+    for label in cost_data:
+        cost_data[label] = sorted(cost_data[label], key=lambda x: x[0])
+
+    return cost_data
+
+# Function to plot costs
+def plot_costs(cost_data, category_name):
+    for label, values in cost_data.items():
+        if not values:
+            continue  
+
+        teus, costs = zip(*values)
+
+        plt.figure(figsize=(8, 5))
+        plt.plot(teus, costs, marker='o', linestyle='-', color='b')
+        plt.xlabel("Ship Model (TEU)")
+        plt.ylabel("Cost")
+        plt.title(f"{label} ({category_name})")
+        plt.grid(True)
+
+        plot_filename = f"{label.replace(' ', '_')}_{category_name}.png"
+        plot_path = os.path.join(plots_folder, plot_filename)
+        plt.savefig(plot_path, bbox_inches='tight')
+        plt.close()
+
+        print(f"Saved plot: {plot_path}")
+
+def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
+    """
+    Reads a specific range (D6:N21) from the given Excel sheet and stores the data in a dictionary.
+
+    Args:
+        file_path (str): Path to the Excel file.
+        sheet_name (str): Name of the sheet containing cost chain data.
+
+    Returns:
+        pd.DataFrame: DataFrame containing the cost chain data.
+    """
+    try:
+        df = pd.read_excel(file_path, sheet_name=sheet_name, usecols="D:N", skiprows=5, nrows=16)
+
+        # Drop rows and columns with all NaN values
+        df = df.dropna(how="all").dropna(axis=1, how="all")
+
+        return df
+    except Exception as e:
+        print(f"Error reading {file_path}: {e}")
+        return None
+
 # Get the current working directory dynamically
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
@@ -102,24 +164,6 @@ with open(output_file_path, 'w') as json_file:
 
 print(f"\nData saved to {output_file_path}")
 
-# Function to extract cost data
-def extract_cost_data(json_data, cost_category):
-    cost_data = {}
-
-    for model, data in json_data.items():
-        teu = int(model.split("_")[-1])  
-
-        for label, cost in data[cost_category].items():
-            if label not in cost_data:
-                cost_data[label] = []
-            if cost is not None:  
-                cost_data[label].append((teu, cost))
-
-    for label in cost_data:
-        cost_data[label] = sorted(cost_data[label], key=lambda x: x[0])
-
-    return cost_data
-
 # Load JSON data
 with open(output_file_path, 'r') as json_file:
     all_models_data = json.load(json_file)
@@ -133,28 +177,6 @@ voyage_cost_data = extract_cost_data(all_models_data, "Voyage_costs")
 plots_folder = os.path.join(current_directory, 'Vessels_DATA', 'Plots')
 os.makedirs(plots_folder, exist_ok=True)  
 
-# Function to plot costs
-def plot_costs(cost_data, category_name):
-    for label, values in cost_data.items():
-        if not values:
-            continue  
-
-        teus, costs = zip(*values)
-
-        plt.figure(figsize=(8, 5))
-        plt.plot(teus, costs, marker='o', linestyle='-', color='b')
-        plt.xlabel("Ship Model (TEU)")
-        plt.ylabel("Cost")
-        plt.title(f"{label} ({category_name})")
-        plt.grid(True)
-
-        plot_filename = f"{label.replace(' ', '_')}_{category_name}.png"
-        plot_path = os.path.join(plots_folder, plot_filename)
-        plt.savefig(plot_path, bbox_inches='tight')
-        plt.close()
-
-        print(f"Saved plot: {plot_path}")
-
 # Generate plots
 plot_costs(total_cost_data, "Total_ship_costs")
 plot_costs(running_cost_data, "Running_costs")
@@ -162,34 +184,6 @@ plot_costs(voyage_cost_data, "Voyage_costs")
 
 print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
 
-
-import os
-import pandas as pd
-import json
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
-    """
-    Reads a specific range (D6:N21) from the given Excel sheet and stores the data in a dictionary.
-
-    Args:
-        file_path (str): Path to the Excel file.
-        sheet_name (str): Name of the sheet containing cost chain data.
-
-    Returns:
-        pd.DataFrame: DataFrame containing the cost chain data.
-    """
-    try:
-        df = pd.read_excel(file_path, sheet_name=sheet_name, usecols="D:N", skiprows=5, nrows=16)
-
-        # Drop rows and columns with all NaN values
-        df = df.dropna(how="all").dropna(axis=1, how="all")
-
-        return df
-    except Exception as e:
-        print(f"Error reading {file_path}: {e}")
-        return None
 
 # Get the current directory dynamically
 current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -292,7 +286,6 @@ print(f"Bar chart saved in {bar_chart_path}")
 
 
 
-#last commit before cleanup 
 
 
 
