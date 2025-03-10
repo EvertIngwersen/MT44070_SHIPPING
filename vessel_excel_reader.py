@@ -163,6 +163,12 @@ plot_costs(voyage_cost_data, "Voyage_costs")
 print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
 
 
+import os
+import pandas as pd
+import json
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
     """
     Reads a specific range (D6:N21) from the given Excel sheet and stores the data in a dictionary.
@@ -248,21 +254,16 @@ print(f"Lowest cost chains saved to {output_lowest_cost_path} (sorted by TEU num
 plots_folder = os.path.join(current_directory, 'Vessels_DATA', 'Plots', 'CHAIN_plots')
 os.makedirs(plots_folder, exist_ok=True)
 
-# Bar Chart: Costs for each chain number and each model
-# We'll create a DataFrame for the costs of each chain in each model
+# Bar Chart: Costs for each chain number (grouped by model size)
+# We'll create a DataFrame for the total chain cost of each chain in each model
 
-# Collecting data for bar chart (chains and their costs)
+# Collecting data for bar chart (chains and their total costs for each model)
 bar_chart_data = []
 for teu_number, data in sorted_chain_data.items():
     for i, chain_id in enumerate(data["Chain ID"]):
         bar_chart_data.append({
             "Chain ID": chain_id,
             "TEU": teu_number,
-            "From Hinterland cost": data["From Hinterland cost"][i],
-            "From Port cost": data["From Port cost"][i],
-            "Maritime cost": data["Maritime cost"][i],
-            "To Port cost": data["To Port cost"][i],
-            "To Hinterland cost": data["To Hinterland cost"][i],
             "Total generalised chain cost": data["Total generalised chain cost"][i]
         })
 
@@ -270,22 +271,20 @@ for teu_number, data in sorted_chain_data.items():
 df_bar_chart = pd.DataFrame(bar_chart_data)
 
 # Plotting the bar chart
-cost_columns = ["From Hinterland cost", "From Port cost", "Maritime cost", "To Port cost", "To Hinterland cost", "Total generalised chain cost"]
-df_bar_chart_melted = df_bar_chart.melt(id_vars=["Chain ID", "TEU"], value_vars=cost_columns, 
-                                        var_name="Cost Type", value_name="Cost")
-
-# Bar chart of costs for each chain
 plt.figure(figsize=(14, 8))
-sns.barplot(x="Chain ID", y="Cost", hue="Cost Type", data=df_bar_chart_melted, dodge=True)
-plt.title('Costs for Each Chain Number (by Cost Type)', fontsize=16)
+
+# Bar chart of total chain costs for each chain, grouped by TEU model
+sns.barplot(x="Chain ID", y="Total generalised chain cost", hue="TEU", data=df_bar_chart, dodge=True)
+
+plt.title('Total Chain Cost for Each Chain Number by Model Size (TEU)', fontsize=16)
 plt.xlabel('Chain ID', fontsize=12)
-plt.ylabel('Cost (USD)', fontsize=12)
+plt.ylabel('Total Chain Cost (USD)', fontsize=12)
 plt.xticks(rotation=45)
-plt.legend(title="Cost Type")
+plt.legend(title="Model Size (TEU)")
 plt.tight_layout()
 
 # Save the bar chart
-bar_chart_path = os.path.join(plots_folder, 'Costs_for_Chain_Numbers.png')
+bar_chart_path = os.path.join(plots_folder, 'Total_Chain_Costs_by_Chain_Number.png')
 plt.savefig(bar_chart_path)
 plt.close()
 
@@ -293,6 +292,7 @@ print(f"Bar chart saved in {bar_chart_path}")
 
 
 
+#last commit before cleanup 
 
 
 
