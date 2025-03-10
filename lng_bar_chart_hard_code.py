@@ -74,7 +74,7 @@ lng_percentages = [lng_totals[0] / lng_totals[3] * 100,
                    lng_totals[2] / lng_totals[3] * 100]
 
 # Define models, categories, and fixed colors for each category
-models = ["MODEL_23964_BASE", "MODEL_23964_LNG"]
+models = ["23964 TEU", "23964 TEU (LNG and Scrubber)"]
 categories = ["Total_ship_costs", "Running_costs", "Voyage_costs"]
 colors = {
     "Total_ship_costs": "blue",
@@ -101,7 +101,7 @@ ax.bar(models[1], lng_percentages[2], width=bar_width,
 
 # Customize the chart
 ax.set_ylabel("Percentage (%)")
-ax.set_title("Cost Breakdown by Model")
+ax.set_title("Cost Breakdown by of Propulsion Type")
 ax.legend()
 
 # Save the figure to the specified directory
