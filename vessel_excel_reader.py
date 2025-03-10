@@ -295,9 +295,14 @@ print(f"Bar chart saved in {bar_chart_path}")
 
 #------- ALTERNATIVE PROPULSION --------------------------------------------------#
 
+# Define the new path to the "ALTERNATIVE_PROP" folder inside "Vessel_DATA"
+alt_prop_data_folder = os.path.join(current_directory, 'Vessels_DATA', 'ALTERNATIVE_PROP')
 
+# Ensure the folder exists
+if not os.path.exists(vessel_data_folder):
+    raise FileNotFoundError(f"Error: The folder '{vessel_data_folder}' does not exist!")
 
-
+alt_prop_models_data = {}
 
 
 
