@@ -1,0 +1,67 @@
+{
+    "571": {
+        "Chain ID": 12,
+        "From region": "Chongqing",
+        "To region": "DEA1",
+        "From port": "Xiamen",
+        "To port": "Bremerhafen",
+        "From Hinterland cost": 1085.7482038294047,
+        "From Port cost": 147.39134578976703,
+        "Maritime cost": 2373.5336006640873,
+        "To Port cost": 446.2452990802655,
+        "To Hinterland cost": 423.6588605434034,
+        "Total generalised chain cost": 4476.577309906927
+    },
+    "6865": {
+        "Chain ID": 13,
+        "From region": "Chongqing",
+        "To region": "DEA1",
+        "From port": "Xiamen",
+        "To port": "Zeebrugge",
+        "From Hinterland cost": 1085.7482038294047,
+        "From Port cost": 101.10585662013449,
+        "Maritime cost": 788.1919530933266,
+        "To Port cost": 384.73529549408147,
+        "To Hinterland cost": 390.61684209720886,
+        "Total generalised chain cost": 2750.3981511341563
+    },
+    "11388": {
+        "Chain ID": 13,
+        "From region": "Chongqing",
+        "To region": "DEA1",
+        "From port": "Xiamen",
+        "To port": "Zeebrugge",
+        "From Hinterland cost": 1085.7482038294047,
+        "From Port cost": 100.44354936547666,
+        "Maritime cost": 728.1908702110671,
+        "To Port cost": 385.3807636251478,
+        "To Hinterland cost": 390.61684209720886,
+        "Total generalised chain cost": 2690.3802291283055
+    },
+    "18800": {
+        "Chain ID": 13,
+        "From region": "Chongqing",
+        "To region": "DEA1",
+        "From port": "Xiamen",
+        "To port": "Zeebrugge",
+        "From Hinterland cost": 1085.7482038294047,
+        "From Port cost": 97.18677520263036,
+        "Maritime cost": 692.1175745430182,
+        "To Port cost": 379.86501966159886,
+        "To Hinterland cost": 390.61684209720886,
+        "Total generalised chain cost": 2645.534415333861
+    },
+    "23964": {
+        "Chain ID": 13,
+        "From region": "Chongqing",
+        "To region": "DEA1",
+        "From port": "Xiamen",
+        "To port": "Zeebrugge",
+        "From Hinterland cost": 1085.7482038294047,
+        "From Port cost": 99.6525134105646,
+        "Maritime cost": 637.5908155018606,
+        "To Port cost": 381.82986950183096,
+        "To Hinterland cost": 390.61684209720886,
+        "Total generalised chain cost": 2595.4382443408695
+    }
+}

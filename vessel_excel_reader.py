@@ -162,11 +162,6 @@ plot_costs(voyage_cost_data, "Voyage_costs")
 print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
 
 
-
-import pandas as pd
-import os
-import json
-
 def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
     """
     Reads a specific range (D6:N21) from the given Excel sheet and stores the data in a dictionary.
@@ -176,7 +171,7 @@ def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
         sheet_name (str): Name of the sheet containing cost chain data.
 
     Returns:
-        dict: Dictionary with column names as keys and lists of values.
+        pd.DataFrame: DataFrame containing the cost chain data.
     """
     try:
         df = pd.read_excel(file_path, sheet_name=sheet_name, usecols="D:N", skiprows=5, nrows=16)
@@ -184,7 +179,7 @@ def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
         # Drop rows and columns with all NaN values
         df = df.dropna(how="all").dropna(axis=1, how="all")
 
-        return df.to_dict(orient="list")
+        return df
     except Exception as e:
         print(f"Error reading {file_path}: {e}")
         return None
@@ -201,6 +196,7 @@ if not os.path.exists(chain_folder):
 
 # Dictionary to store all models
 all_chain_data = {}
+lowest_cost_chains = {}
 
 # Loop through all Excel files in the CHAIN folder
 for file_name in os.listdir(chain_folder):
@@ -213,24 +209,39 @@ for file_name in os.listdir(chain_folder):
             file_path = os.path.join(chain_folder, file_name)
 
             # Read the cost chain data
-            cost_chain_data = read_cost_chain_data(file_path)
+            df = read_cost_chain_data(file_path)
 
-            if cost_chain_data:
-                all_chain_data[teu_number] = cost_chain_data
+            if df is not None:
+                # Convert to dictionary and store full data
+                all_chain_data[teu_number] = df.to_dict(orient="list")
+
+                # Find the row with the minimum total cost
+                min_cost_index = df["Total generalised chain cost"].idxmin()
+                lowest_cost_chain = df.iloc[min_cost_index].to_dict()
+                
+                # Store the lowest cost chain for this TEU model
+                lowest_cost_chains[teu_number] = lowest_cost_chain
         except ValueError:
             print(f"Skipping file {file_name} (TEU number extraction failed).")
 
-# Sort dictionary by TEU number (ascending order)
+# Sort both dictionaries by TEU number (ascending order)
 sorted_chain_data = dict(sorted(all_chain_data.items()))
+sorted_lowest_cost_chains = dict(sorted(lowest_cost_chains.items()))
 
-# Define output file path
-output_file_path = os.path.join(current_directory, 'Vessels_DATA', 'all_chain_data.json')
+# Define output file paths
+output_all_data_path = os.path.join(current_directory, 'Vessels_DATA', 'all_chain_data.json')
+output_lowest_cost_path = os.path.join(current_directory, 'Vessels_DATA', 'lowest_cost_chains.json')
 
-# Save the sorted dictionary as a JSON file
-with open(output_file_path, 'w') as json_file:
+# Save all chain data
+with open(output_all_data_path, 'w') as json_file:
     json.dump(sorted_chain_data, json_file, indent=4)
 
-print(f"\nData saved to {output_file_path} (sorted by TEU number).")
+# Save lowest-cost chain data
+with open(output_lowest_cost_path, 'w') as json_file:
+    json.dump(sorted_lowest_cost_chains, json_file, indent=4)
+
+print(f"\nData saved to {output_all_data_path} (sorted by TEU number).")
+print(f"Lowest cost chains saved to {output_lowest_cost_path} (sorted by TEU number).")
 
 
 
