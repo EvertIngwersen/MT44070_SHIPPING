@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Mar 10 15:09:32 2025
+import matplotlib.pyplot as plt
 
-@author: evert
-"""
-
+# Provided data
 data = {
     "MODEL_23964_BASE": {
         "Total_ship_costs": {
@@ -55,3 +51,60 @@ data = {
         }
     }
 }
+
+# Function to calculate total costs per category
+def compute_totals(model_data):
+    total_ship = sum(model_data["Total_ship_costs"].values())
+    running = sum(model_data["Running_costs"].values())
+    voyage = sum(model_data["Voyage_costs"].values())
+    total = total_ship + running + voyage
+    return total_ship, running, voyage, total
+
+# Compute totals for each model
+base_totals = compute_totals(data["MODEL_23964_BASE"])
+lng_totals = compute_totals(data["MODEL_23964_LNG"])
+
+# Calculate percentages for each cost category
+base_percentages = [base_totals[0] / base_totals[3] * 100,
+                    base_totals[1] / base_totals[3] * 100,
+                    base_totals[2] / base_totals[3] * 100]
+
+lng_percentages = [lng_totals[0] / lng_totals[3] * 100,
+                   lng_totals[1] / lng_totals[3] * 100,
+                   lng_totals[2] / lng_totals[3] * 100]
+
+# Define models, categories, and fixed colors for each category
+models = ["MODEL_23964_BASE", "MODEL_23964_LNG"]
+categories = ["Total_ship_costs", "Running_costs", "Voyage_costs"]
+colors = {
+    "Total_ship_costs": "blue",
+    "Running_costs": "orange",
+    "Voyage_costs": "green"
+}
+bar_width = 0.5
+
+fig, ax = plt.subplots()
+
+# Plot stacked bars for MODEL_23964_BASE with labels
+ax.bar(models[0], base_percentages[0], width=bar_width, label="Total_ship_costs", color=colors["Total_ship_costs"])
+ax.bar(models[0], base_percentages[1], width=bar_width, label="Running_costs", 
+       bottom=base_percentages[0], color=colors["Running_costs"])
+ax.bar(models[0], base_percentages[2], width=bar_width, label="Voyage_costs", 
+       bottom=base_percentages[0] + base_percentages[1], color=colors["Voyage_costs"])
+
+# Plot stacked bars for MODEL_23964_LNG without duplicating labels
+ax.bar(models[1], lng_percentages[0], width=bar_width, color=colors["Total_ship_costs"])
+ax.bar(models[1], lng_percentages[1], width=bar_width, 
+       bottom=lng_percentages[0], color=colors["Running_costs"])
+ax.bar(models[1], lng_percentages[2], width=bar_width, 
+       bottom=lng_percentages[0] + lng_percentages[1], color=colors["Voyage_costs"])
+
+# Customize the chart
+ax.set_ylabel("Percentage (%)")
+ax.set_title("Cost Breakdown by Model")
+ax.legend()
+
+# Save the figure to the specified directory
+save_path = r"C:\Users\evert\Documents\TU-Delft\TIL Master\MT44070 Shipping Management\MT44070_REPO\MT44070_SHIPPING\Vessels_DATA\Plots\cost_breakdown.png"
+plt.savefig(save_path)
+plt.show()
