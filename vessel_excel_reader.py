@@ -89,27 +89,7 @@ def plot_costs(cost_data, category_name):
 
         print(f"Saved plot: {plot_path}")
 
-def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
-    """
-    Reads a specific range (D6:N21) from the given Excel sheet and stores the data in a dictionary.
 
-    Args:
-        file_path (str): Path to the Excel file.
-        sheet_name (str): Name of the sheet containing cost chain data.
-
-    Returns:
-        pd.DataFrame: DataFrame containing the cost chain data.
-    """
-    try:
-        df = pd.read_excel(file_path, sheet_name=sheet_name, usecols="D:N", skiprows=5, nrows=16)
-
-        # Drop rows and columns with all NaN values
-        df = df.dropna(how="all").dropna(axis=1, how="all")
-
-        return df
-    except Exception as e:
-        print(f"Error reading {file_path}: {e}")
-        return None
 
 # Get the current working directory dynamically
 current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -184,6 +164,27 @@ plot_costs(voyage_cost_data, "Voyage_costs")
 
 print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
 
+def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
+    """
+    Reads a specific range (D6:N21) from the given Excel sheet and stores the data in a dictionary.
+
+    Args:
+        file_path (str): Path to the Excel file.
+        sheet_name (str): Name of the sheet containing cost chain data.
+
+    Returns:
+        pd.DataFrame: DataFrame containing the cost chain data.
+    """
+    try:
+        df = pd.read_excel(file_path, sheet_name=sheet_name, usecols="D:N", skiprows=5, nrows=16)
+
+        # Drop rows and columns with all NaN values
+        df = df.dropna(how="all").dropna(axis=1, how="all")
+
+        return df
+    except Exception as e:
+        print(f"Error reading {file_path}: {e}")
+        return None
 
 # Get the current directory dynamically
 current_directory = os.path.dirname(os.path.abspath(__file__))
