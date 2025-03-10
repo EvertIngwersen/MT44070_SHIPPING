@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Mar 10 15:47:10 2025
-
-@author: evert
-"""
-
 # A Loop of Life
 
 import time
@@ -23,25 +16,16 @@ def wander():
 
 class Heart:
     def beats(self):
-        return True  # Keeps the loop going
-
-class Soul:
-    def is_weary(self):
-        return False  # Change this to True to stop the loop
-
-class Path:
-    def is_complete(self):
-        return False  # Change this to True to stop the loop
+        return time.time() - start_time < 5  # Run for 5 seconds
 
 # Define the journey
 heart = Heart()
-soul = Soul()
-path = Path()
-
 dreams = "stars"
 doubts = False
 dusk = False
 dawn = True
+
+start_time = time.time()  # Mark the start
 
 while heart.beats():
     breathe()
@@ -55,7 +39,6 @@ while heart.beats():
     else:
         wander()
     
-    if soul.is_weary() or path.is_complete():
-        break
-    
-    time.sleep(2)  # Adds a natural rhythm
+    time.sleep(1)  # Adds a natural rhythm
+
+print("The journey pauses, but the story continues...")
