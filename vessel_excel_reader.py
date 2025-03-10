@@ -12,6 +12,9 @@ import seaborn as sns
 import os
 import matplotlib.pyplot as plt
 
+
+#------- MODEL TOTAL COSTS -----------------------------------------------------#
+
 def find_and_store_costs(labels, result_dict, sheet_path, sheet_name):
     """
     Searches for the given labels in an Excel sheet and stores their values in the result dictionary.
@@ -163,6 +166,10 @@ plot_costs(running_cost_data, "Running_costs")
 plot_costs(voyage_cost_data, "Voyage_costs")
 
 print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
+
+#------- MODEL CHAIN COSTS -----------------------------------------------------#
+
+
 
 def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
     """
