@@ -163,6 +163,10 @@ print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
 
 
 
+import pandas as pd
+import os
+import json
+
 def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
     """
     Reads a specific range (D6:N21) from the given Excel sheet and stores the data in a dictionary.
@@ -175,16 +179,12 @@ def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
         dict: Dictionary with column names as keys and lists of values.
     """
     try:
-        # Read only the required range (D6:N21)
         df = pd.read_excel(file_path, sheet_name=sheet_name, usecols="D:N", skiprows=5, nrows=16)
 
         # Drop rows and columns with all NaN values
         df = df.dropna(how="all").dropna(axis=1, how="all")
 
-        # Convert DataFrame to dictionary format (column names as keys)
-        cost_chain_data = df.to_dict(orient="list")
-
-        return cost_chain_data
+        return df.to_dict(orient="list")
     except Exception as e:
         print(f"Error reading {file_path}: {e}")
         return None
@@ -220,14 +220,18 @@ for file_name in os.listdir(chain_folder):
         except ValueError:
             print(f"Skipping file {file_name} (TEU number extraction failed).")
 
+# Sort dictionary by TEU number (ascending order)
+sorted_chain_data = dict(sorted(all_chain_data.items()))
+
 # Define output file path
 output_file_path = os.path.join(current_directory, 'Vessels_DATA', 'all_chain_data.json')
 
-# Save the dictionary as a JSON file
+# Save the sorted dictionary as a JSON file
 with open(output_file_path, 'w') as json_file:
-    json.dump(all_chain_data, json_file, indent=4)
+    json.dump(sorted_chain_data, json_file, indent=4)
 
-print(f"\nData saved to {output_file_path}")
+print(f"\nData saved to {output_file_path} (sorted by TEU number).")
+
 
 
 
