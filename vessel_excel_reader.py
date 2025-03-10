@@ -162,6 +162,7 @@ plot_costs(voyage_cost_data, "Voyage_costs")
 print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
 
 
+
 def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
     """
     Reads a specific range (D6:N21) from the given Excel sheet and stores the data in a dictionary.
@@ -173,16 +174,20 @@ def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
     Returns:
         dict: Dictionary with column names as keys and lists of values.
     """
-    # Read only the required range (D6:N21)
-    df = pd.read_excel(file_path, sheet_name=sheet_name, usecols="D:N", skiprows=5, nrows=16)
+    try:
+        # Read only the required range (D6:N21)
+        df = pd.read_excel(file_path, sheet_name=sheet_name, usecols="D:N", skiprows=5, nrows=16)
 
-    # Drop rows and columns with all NaN values
-    df = df.dropna(how="all").dropna(axis=1, how="all")
+        # Drop rows and columns with all NaN values
+        df = df.dropna(how="all").dropna(axis=1, how="all")
 
-    # Convert DataFrame to dictionary format (column names as keys)
-    cost_chain_data = df.to_dict(orient="list")
+        # Convert DataFrame to dictionary format (column names as keys)
+        cost_chain_data = df.to_dict(orient="list")
 
-    return cost_chain_data
+        return cost_chain_data
+    except Exception as e:
+        print(f"Error reading {file_path}: {e}")
+        return None
 
 # Get the current directory dynamically
 current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -194,18 +199,37 @@ chain_folder = os.path.join(current_directory, 'Vessels_DATA', 'CHAIN')
 if not os.path.exists(chain_folder):
     raise FileNotFoundError(f"Error: The folder '{chain_folder}' does not exist!")
 
-# Define the file path for MODEL_CHAIN_23964.xlsx
-file_path = os.path.join(chain_folder, 'MODEL_CHAIN_23964.xlsx')
+# Dictionary to store all models
+all_chain_data = {}
 
-# Ensure the file exists
-if not os.path.exists(file_path):
-    raise FileNotFoundError(f"Error: The file '{file_path}' does not exist!")
+# Loop through all Excel files in the CHAIN folder
+for file_name in os.listdir(chain_folder):
+    if file_name.startswith("MODEL_CHAIN_") and file_name.endswith(".xlsx"):
+        try:
+            # Extract TEU number from file name (MODEL_CHAIN_6865.xlsx → 6865)
+            teu_number = int(file_name.split("_")[-1].split(".")[0])
 
-# Read the cost chain data
-cost_chain_data = read_cost_chain_data(file_path)
+            # Construct full file path
+            file_path = os.path.join(chain_folder, file_name)
 
-# Print to verify
-print(cost_chain_data)
+            # Read the cost chain data
+            cost_chain_data = read_cost_chain_data(file_path)
+
+            if cost_chain_data:
+                all_chain_data[teu_number] = cost_chain_data
+        except ValueError:
+            print(f"Skipping file {file_name} (TEU number extraction failed).")
+
+# Define output file path
+output_file_path = os.path.join(current_directory, 'Vessels_DATA', 'all_chain_data.json')
+
+# Save the dictionary as a JSON file
+with open(output_file_path, 'w') as json_file:
+    json.dump(all_chain_data, json_file, indent=4)
+
+print(f"\nData saved to {output_file_path}")
+
+
 
 
 
