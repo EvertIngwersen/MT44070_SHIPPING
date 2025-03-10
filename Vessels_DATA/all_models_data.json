@@ -1,26 +1,50 @@
 {
-    "MODEL_11388": {
+    "MODEL_09115": {
         "Total_ship_costs": {
-            "Running cost ship": 343402.0,
-            "Voyage cost ship": 7367486.0,
-            "Port handling cost ship": 3548975.0,
-            "Fixed cost ship": 1975579.0
+            "Running cost ship": 354120.0,
+            "Voyage cost ship": 5352546.0,
+            "Port handling cost ship": 2840613.0,
+            "Fixed cost ship": 1886739.0
         },
         "Running_costs": {
-            "Manning cost ship": 162558.0,
-            "Store cost": 7498.0,
-            "Insurance cost": 130371.0,
-            "Repair and Maintainance cost": 17062.0,
-            "Management cost": 25913.0
+            "Manning cost ship": 183507.0,
+            "Store cost": 8418.0,
+            "Insurance cost": 113946.0,
+            "Repair and Maintainance cost": 19156.0,
+            "Management cost": 29093.0
         },
         "Voyage_costs": {
-            "Fuel cost ship ports": 65330.0,
-            "Fuel cost ship ECA": 476502.0,
-            "Fuel cost ship NON ECA": 4484030.0,
-            "Lub oil cost ship": 22907.0,
+            "Fuel cost ship ports": 40809.0,
+            "Fuel cost ship ECA": 330903.0,
+            "Fuel cost ship NON ECA": 3113902.0,
+            "Lub oil cost ship": 25961.0,
             "External cost": 0.0,
-            "ETS cost ship": 416316.0,
-            "Cannel cost ship": 1092560.0
+            "ETS cost ship": 289108.0,
+            "Cannel cost ship": 915885.0
+        }
+    },
+    "MODEL_13892": {
+        "Total_ship_costs": {
+            "Running cost ship": 395656.0,
+            "Voyage cost ship": 7606623.0,
+            "Port handling cost ship": 4329325.0,
+            "Fixed cost ship": 2501304.0
+        },
+        "Running_costs": {
+            "Manning cost ship": 181212.0,
+            "Store cost": 8162.0,
+            "Insurance cost": 159500.0,
+            "Repair and Maintainance cost": 18573.0,
+            "Management cost": 28208.0
+        },
+        "Voyage_costs": {
+            "Fuel cost ship ports": 35855.0,
+            "Fuel cost ship ECA": 471288.0,
+            "Fuel cost ship NON ECA": 4434963.0,
+            "Lub oil cost ship": 27398.0,
+            "External cost": 0.0,
+            "ETS cost ship": 411761.0,
+            "Cannel cost ship": 1287191.0
         }
     },
     "MODEL_18800": {
@@ -47,6 +71,30 @@
             "Cannel cost ship": 1668680.0
         }
     },
+    "MODEL_20954": {
+        "Total_ship_costs": {
+            "Running cost ship": 498711.0,
+            "Voyage cost ship": 8531058.0,
+            "Port handling cost ship": 6530138.0,
+            "Fixed cost ship": 3649051.0
+        },
+        "Running_costs": {
+            "Manning cost ship": 208547.0,
+            "Store cost": 8760.0,
+            "Insurance cost": 231213.0,
+            "Repair and Maintainance cost": 19921.0,
+            "Management cost": 30270.0
+        },
+        "Voyage_costs": {
+            "Fuel cost ship ports": 49932.0,
+            "Fuel cost ship ECA": 474903.0,
+            "Fuel cost ship NON ECA": 4468985.0,
+            "Lub oil cost ship": 27892.0,
+            "External cost": 0.0,
+            "ETS cost ship": 414919.0,
+            "Cannel cost ship": 1836107.0
+        }
+    },
     "MODEL_23964": {
         "Total_ship_costs": {
             "Running cost ship": 480936.0,
@@ -69,54 +117,6 @@
             "External cost": 0.0,
             "ETS cost ship": 413617.0,
             "Cannel cost ship": 2053900.0
-        }
-    },
-    "MODEL_571": {
-        "Total_ship_costs": {
-            "Running cost ship": 331626.0,
-            "Voyage cost ship": 1489175.0,
-            "Port handling cost ship": 178259.0,
-            "Fixed cost ship": 313153.0
-        },
-        "Running_costs": {
-            "Manning cost ship": 196054.0,
-            "Store cost": 10462.0,
-            "Insurance cost": 55732.0,
-            "Repair and Maintainance cost": 27544.0,
-            "Management cost": 41833.0
-        },
-        "Voyage_costs": {
-            "Fuel cost ship ports": 5237.0,
-            "Fuel cost ship ECA": 96310.0,
-            "Fuel cost ship NON ECA": 906304.0,
-            "Lub oil cost ship": 34166.0,
-            "External cost": 0.0,
-            "ETS cost ship": 84145.0,
-            "Cannel cost ship": 251854.0
-        }
-    },
-    "MODEL_6865": {
-        "Total_ship_costs": {
-            "Running cost ship": 336440.0,
-            "Voyage cost ship": 4301953.0,
-            "Port handling cost ship": 2139420.0,
-            "Fixed cost ship": 1539013.0
-        },
-        "Running_costs": {
-            "Manning cost ship": 182218.0,
-            "Store cost": 8691.0,
-            "Insurance cost": 95720.0,
-            "Repair and Maintainance cost": 19776.0,
-            "Management cost": 30035.0
-        },
-        "Voyage_costs": {
-            "Fuel cost ship ports": 22300.0,
-            "Fuel cost ship ECA": 266082.0,
-            "Fuel cost ship NON ECA": 2503912.0,
-            "Lub oil cost ship": 28820.0,
-            "External cost": 0.0,
-            "ETS cost ship": 232474.0,
-            "Cannel cost ship": 740997.0
         }
     }
 }
