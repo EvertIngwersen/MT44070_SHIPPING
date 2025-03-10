@@ -168,6 +168,7 @@ plot_costs(voyage_cost_data, "Voyage_costs")
 print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
 
 
+
 def plot_cost_breakdown_percentage(json_data):
     """
     Generates a stacked bar chart showing the percentage breakdown of costs for each ship model (TEU).
