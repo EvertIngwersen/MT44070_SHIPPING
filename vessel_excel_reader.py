@@ -163,7 +163,6 @@ plot_costs(voyage_cost_data, "Voyage_costs")
 print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
 
 
-
 def read_cost_chain_data(file_path, sheet_name="CostChain_TwoNuts"):
     """
     Reads a specific range (D6:N21) from the given Excel sheet and stores the data in a dictionary.
@@ -249,72 +248,50 @@ print(f"Lowest cost chains saved to {output_lowest_cost_path} (sorted by TEU num
 plots_folder = os.path.join(current_directory, 'Vessels_DATA', 'Plots', 'CHAIN_plots')
 os.makedirs(plots_folder, exist_ok=True)
 
-# Scatter Plot: TEU Number vs. Total Chain Cost
-total_cost_data = []
+# Bar Chart: Costs for each chain number and each model
+# We'll create a DataFrame for the costs of each chain in each model
+
+# Collecting data for bar chart (chains and their costs)
+bar_chart_data = []
 for teu_number, data in sorted_chain_data.items():
-    total_cost = data.get("Total generalised chain cost", [None])[0]
-    if total_cost is not None:
-        total_cost_data.append([teu_number, total_cost])
+    for i, chain_id in enumerate(data["Chain ID"]):
+        bar_chart_data.append({
+            "Chain ID": chain_id,
+            "TEU": teu_number,
+            "From Hinterland cost": data["From Hinterland cost"][i],
+            "From Port cost": data["From Port cost"][i],
+            "Maritime cost": data["Maritime cost"][i],
+            "To Port cost": data["To Port cost"][i],
+            "To Hinterland cost": data["To Hinterland cost"][i],
+            "Total generalised chain cost": data["Total generalised chain cost"][i]
+        })
 
-df_total_cost = pd.DataFrame(total_cost_data, columns=["TEU", "Total Chain Cost"])
+# Convert to DataFrame
+df_bar_chart = pd.DataFrame(bar_chart_data)
 
-# Scatter plot of TEU number vs Total Chain Cost
-plt.figure(figsize=(10, 6))
-sns.scatterplot(x="TEU", y="Total Chain Cost", data=df_total_cost, color='blue')
-plt.title('TEU Number vs. Total Chain Cost')
-plt.xlabel('TEU Number')
-plt.ylabel('Total Chain Cost')
-plt.grid(True)
-scatter_plot_path = os.path.join(plots_folder, 'TEU_vs_Total_Chain_Cost.png')
-plt.savefig(scatter_plot_path)
+# Plotting the bar chart
+cost_columns = ["From Hinterland cost", "From Port cost", "Maritime cost", "To Port cost", "To Hinterland cost", "Total generalised chain cost"]
+df_bar_chart_melted = df_bar_chart.melt(id_vars=["Chain ID", "TEU"], value_vars=cost_columns, 
+                                        var_name="Cost Type", value_name="Cost")
+
+# Bar chart of costs for each chain
+plt.figure(figsize=(14, 8))
+sns.barplot(x="Chain ID", y="Cost", hue="Cost Type", data=df_bar_chart_melted, dodge=True)
+plt.title('Costs for Each Chain Number (by Cost Type)', fontsize=16)
+plt.xlabel('Chain ID', fontsize=12)
+plt.ylabel('Cost (USD)', fontsize=12)
+plt.xticks(rotation=45)
+plt.legend(title="Cost Type")
+plt.tight_layout()
+
+# Save the bar chart
+bar_chart_path = os.path.join(plots_folder, 'Costs_for_Chain_Numbers.png')
+plt.savefig(bar_chart_path)
 plt.close()
 
-# Line Plot: TEU Number vs. Lowest Chain Cost
-lowest_cost_data = []
-for teu_number, data in sorted_lowest_cost_chains.items():
-    lowest_cost = data.get("Total generalised chain cost", None)
-    if lowest_cost is not None:
-        lowest_cost_data.append([teu_number, lowest_cost])
+print(f"Bar chart saved in {bar_chart_path}")
 
-df_lowest_cost = pd.DataFrame(lowest_cost_data, columns=["TEU", "Lowest Chain Cost"])
 
-# Line plot of TEU number vs Lowest Chain Cost
-plt.figure(figsize=(10, 6))
-sns.lineplot(x="TEU", y="Lowest Chain Cost", data=df_lowest_cost, marker='o', color='green')
-plt.title('TEU Number vs. Lowest Chain Cost')
-plt.xlabel('TEU Number')
-plt.ylabel('Lowest Chain Cost')
-plt.grid(True)
-line_plot_path = os.path.join(plots_folder, 'TEU_vs_Lowest_Chain_Cost.png')
-plt.savefig(line_plot_path)
-plt.close()
-
-# Pie Chart: Distribution of Lowest Chain Costs
-cost_ranges = ["< 1000", "1000 - 5000", "5000 - 10000", "> 10000"]
-cost_counts = {range_label: 0 for range_label in cost_ranges}
-
-# Assign each lowest chain cost to a range
-for teu_number, data in sorted_lowest_cost_chains.items():
-    lowest_cost = data.get("Total generalised chain cost", None)
-    if lowest_cost is not None:
-        if lowest_cost < 1000:
-            cost_counts["< 1000"] += 1
-        elif 1000 <= lowest_cost < 5000:
-            cost_counts["1000 - 5000"] += 1
-        elif 5000 <= lowest_cost < 10000:
-            cost_counts["5000 - 10000"] += 1
-        else:
-            cost_counts["> 10000"] += 1
-
-# Pie chart of lowest chain cost distribution
-plt.figure(figsize=(8, 8))
-plt.pie(cost_counts.values(), labels=cost_counts.keys(), autopct='%1.1f%%', colors=sns.color_palette("Set2"))
-plt.title('Distribution of Lowest Chain Costs by Range')
-pie_chart_path = os.path.join(plots_folder, 'Lowest_Chain_Cost_Distribution.png')
-plt.savefig(pie_chart_path)
-plt.close()
-
-print(f"Plots saved in {plots_folder}")
 
 
 
