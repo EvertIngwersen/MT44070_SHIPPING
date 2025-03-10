@@ -1,5 +1,24 @@
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 
+# Check available styles
+print("Available styles:", plt.style.available)
+
+# Use a seaborn style that is available
+plt.style.use('seaborn-v0_8-colorblind')
+
+# Customize rcParams to mimic Excel-like formatting
+mpl.rcParams.update({
+    'axes.facecolor': 'white',
+    'axes.edgecolor': 'black',
+    'grid.color': 'lightgray',
+    'grid.linestyle': '--',
+    'grid.linewidth': 0.5,
+    'font.family': 'Calibri',  # if Calibri is installed, otherwise choose another font
+    'axes.titleweight': 'bold',
+    'axes.titlesize': 14,
+    'axes.labelsize': 12
+})
 # Provided data
 data = {
     "MODEL_23964_BASE": {
