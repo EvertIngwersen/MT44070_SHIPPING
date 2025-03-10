@@ -167,6 +167,49 @@ plot_costs(voyage_cost_data, "Voyage_costs")
 
 print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
 
+
+def plot_cost_breakdown_percentage(json_data):
+    """
+    Generates a stacked bar chart showing the percentage breakdown of costs for each ship model (TEU).
+    
+    Args:
+        json_data (dict): Dictionary containing cost data for different ship models.
+    """
+    cost_categories = ["Running cost ship", "Voyage cost ship", "Port handling cost ship", "Fixed cost ship"]
+    data = []
+
+    # Extract and normalize cost data
+    for model, data_dict in json_data.items():
+        teu = int(model.split("_")[-1])
+        total_cost = sum(data_dict["Total_ship_costs"].values())  # Sum of all cost components
+        
+        if total_cost > 0:  # Avoid division by zero
+            cost_percentages = {category: (data_dict["Total_ship_costs"].get(category, 0) / total_cost) * 100 for category in cost_categories}
+            cost_percentages["TEU"] = teu
+            data.append(cost_percentages)
+
+    # Convert to DataFrame
+    df = pd.DataFrame(data).sort_values(by="TEU")
+
+    # Plot stacked bar chart
+    plt.figure(figsize=(10, 6))
+    df.set_index("TEU").plot(kind="bar", stacked=True, colormap="viridis", figsize=(12, 6))
+
+    plt.xlabel("Ship Type (TEU)")
+    plt.ylabel("Cost Percentage (%)")
+    plt.title("Cost Breakdown by Ship Type (Percentage)")
+    plt.legend(title="Cost Components", bbox_to_anchor=(1.05, 1), loc="upper left")
+    plt.xticks(rotation=45)
+    plt.grid(axis="y", linestyle="--", alpha=0.7)
+    
+    plt.tight_layout()
+    plt.show()
+
+# Call function with loaded JSON data
+plot_cost_breakdown_percentage(all_models_data)
+
+
+
 #------- MODEL CHAIN COSTS -----------------------------------------------------#
 
 
