@@ -171,7 +171,8 @@ print("\nAll plots have been saved in 'Vessels_DATA/Plots'.")
 
 def plot_cost_breakdown_percentage(json_data):
     """
-    Generates a stacked bar chart showing the percentage breakdown of costs for each ship model (TEU).
+    Generates a stacked bar chart showing the percentage breakdown of costs for each ship model (TEU)
+    and annotates each segment with its value.
     
     Args:
         json_data (dict): Dictionary containing cost data for different ship models.
@@ -185,16 +186,17 @@ def plot_cost_breakdown_percentage(json_data):
         total_cost = sum(data_dict["Total_ship_costs"].values())  # Sum of all cost components
         
         if total_cost > 0:  # Avoid division by zero
-            cost_percentages = {category: (data_dict["Total_ship_costs"].get(category, 0) / total_cost) * 100 for category in cost_categories}
+            cost_percentages = {category: (data_dict["Total_ship_costs"].get(category, 0) / total_cost) * 100 
+                                for category in cost_categories}
             cost_percentages["TEU"] = teu
             data.append(cost_percentages)
 
-    # Convert to DataFrame
+    # Convert to DataFrame and sort
     df = pd.DataFrame(data).sort_values(by="TEU")
 
     # Plot stacked bar chart
     plt.figure(figsize=(10, 6))
-    df.set_index("TEU").plot(kind="bar", stacked=True, colormap="viridis", figsize=(12, 6))
+    ax = df.set_index("TEU").plot(kind="bar", stacked=True, colormap="viridis", figsize=(12, 6))
 
     plt.xlabel("Ship Type (TEU)")
     plt.ylabel("Cost Percentage (%)")
@@ -203,11 +205,24 @@ def plot_cost_breakdown_percentage(json_data):
     plt.xticks(rotation=45)
     plt.grid(axis="y", linestyle="--", alpha=0.7)
     
+    # Annotate each segment in the stacked bars
+    for container in ax.containers:
+        # Loop over each bar in the container
+        for bar in container:
+            height = bar.get_height()
+            # Only add label if the height is significant
+            if height > 0:
+                # Get center of the bar segment: 
+                x = bar.get_x() + bar.get_width() / 2
+                y = bar.get_y() + height / 2
+                ax.text(x, y, f'{height:.1f}%', ha='center', va='center', fontsize=8, color='white')
+    
     plt.tight_layout()
     plt.show()
 
 # Call function with loaded JSON data
 plot_cost_breakdown_percentage(all_models_data)
+
 
 
 
