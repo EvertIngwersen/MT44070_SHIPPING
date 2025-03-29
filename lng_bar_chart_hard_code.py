@@ -121,7 +121,7 @@ base_percentages = compute_percentages(data["MODEL_23964_BASE"])
 lng_percentages = compute_percentages(data["MODEL_23964_LNG"])
 
 # Define models, categories, and colors
-models = ["23964 TEU", "23964 TEU (LNG and Scrubber)"]
+models = ["23964 TEU", "23964 TEU (LNG or Scrubber)"]
 categories = ["Running cost ship", "Voyage cost ship", "Port handling cost ship", "Fixed cost ship"]
 colors = {
     "Running cost ship": "blue",
