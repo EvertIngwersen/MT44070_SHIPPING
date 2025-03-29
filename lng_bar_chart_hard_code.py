@@ -104,7 +104,7 @@ data = {
     "MODEL_23964_LNG": {
         "Total_ship_costs": {
             "Running cost ship": 480936.0,
-            "Voyage cost ship": 30133473.0,
+            "Voyage cost ship": 8729414.0,
             "Port handling cost ship": 7403358.0,
             "Fixed cost ship": 3977509.0
         }
