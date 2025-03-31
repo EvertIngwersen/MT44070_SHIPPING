@@ -91,25 +91,30 @@ mpl.rcParams.update({
     'axes.labelsize': 12
 })
 
-# Provided data
+# Provided data LNG == scrubber voor nu
 data = {
     "MODEL_23964_BASE": {
-        "Total_ship_costs": {
-            "Running cost ship": 480936.0,
-            "Voyage cost ship": 8929520.0,
-            "Port handling cost ship": 7403358.0,
-            "Fixed cost ship": 3977509.0
+        "Fuel_costs": {
+            "Fuel_cost_ship_ports": 202937.0,
+            "Fuel_cost_ship_ECA": 473413.0,
+            "Fuel_cost_ship_NON_ECA": 4454960.0,
+            "Lub_oil_cost_ship": 27718.0,
+            "ETS_cost_ship": 413617,
+            "Cannel_cost_ship": 2053900
+
         }
     },
     "MODEL_23964_LNG": {
-        "Total_ship_costs": {
-            "Running cost ship": 480936.0,
-            "Voyage cost ship": 8729414.0,
-            "Port handling cost ship": 7403358.0,
-            "Fixed cost ship": 3977509.0
+        "Fuel_costs": {
+            "Fuel_cost_ship_ports": 202937.0,
+            "Fuel_cost_ship_ECA": 315770.0,
+            "Fuel_cost_ship_NON_ECA": 4454960.0,
+            "Lub_oil_cost_ship": 27718.0,
+            "ETS_cost_ship": 413617,
+            "Cannel_cost_ship": 2053900
+            }
         }
     }
-}
 
 # Function to compute percentage breakdown
 def compute_percentages(model_data):
