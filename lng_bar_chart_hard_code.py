@@ -118,26 +118,30 @@ data = {
 
 # Function to compute percentage breakdown
 def compute_percentages(model_data):
-    total_cost = sum(model_data["Total_ship_costs"].values())
-    return {k: (v / total_cost) * 100 for k, v in model_data["Total_ship_costs"].items()}
+    total_cost = sum(model_data["Fuel_costs"].values())
+    return {k: (v / total_cost) * 100 for k, v in model_data["Fuel_costs"].items()}
 
 # Compute percentages
 base_percentages = compute_percentages(data["MODEL_23964_BASE"])
 lng_percentages = compute_percentages(data["MODEL_23964_LNG"])
 
 # Define models, categories, and colors
-models = ["23964 TEU", "23964 TEU (LNG or Scrubber)"]
-categories = ["Running cost ship", "Voyage cost ship", "Port handling cost ship", "Fixed cost ship"]
+models = ["23964 TEU", "23964 TEU (with scrubber"]
+categories = ["Fuel_cost_ship_ports", "Fuel_cost_ship_ECA", "Fuel_cost_ship_NON_ECA", 
+              "Lub_oil_cost_ship", "ETS_cost_ship", "Cannel_cost_ship"]
 colors = {
-    "Running cost ship": "blue",
-    "Voyage cost ship": "orange",
-    "Port handling cost ship": "green",
-    "Fixed cost ship": "red"
+    "Fuel_cost_ship_ports": "blue",
+    "Fuel_cost_ship_ECA": "orange",
+    "Fuel_cost_ship_NON_ECA": "green",
+    "Lub_oil_cost_ship": "red",
+    'ETS_cost_ship': "magenta",
+    "Cannel_cost_ship": "cyan",
 }
 bar_width = 0.5
 
 # Create the figure with a smaller size
 fig, ax = plt.subplots(figsize=(8, 6))
+plt.grid()
 
 # Initialize bottom values for stacking
 bottom_base = [0, 0]  # For 23964 TEU and 23964 TEU (LNG)
@@ -154,7 +158,7 @@ for category in categories:
 # Customize the chart
 ax.set_ylabel("Percentage (%)", fontsize=12)
 ax.set_xlabel("Ship Type", fontsize=12)
-ax.set_title("Cost Breakdown by Propulsion Type", fontsize=14)
+ax.set_title("Cost Breakdown by No Scrubber & Scrubber", fontsize=14)
 ax.tick_params(axis='x', rotation=30, labelsize=10)
 ax.tick_params(axis='y', labelsize=10)
 
