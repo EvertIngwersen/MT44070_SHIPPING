@@ -104,7 +104,7 @@ data = {
 
         }
     },
-    "MODEL_23964_LNG": {
+    "MODEL_23964_SCRUBBER": {
         "Fuel_costs": {
             "Fuel_cost_ship_ports": 202937.0,
             "Fuel_cost_ship_ECA": 315770.0,
@@ -115,6 +115,8 @@ data = {
             }
         }
     }
+            
+
 
 # Function to compute percentage breakdown
 def compute_percentages(model_data):
@@ -123,7 +125,7 @@ def compute_percentages(model_data):
 
 # Compute percentages
 base_percentages = compute_percentages(data["MODEL_23964_BASE"])
-lng_percentages = compute_percentages(data["MODEL_23964_LNG"])
+scrubber_percentages = compute_percentages(data["MODEL_23964_SCRUBBER"])
 
 # Define models, categories, and colors
 models = ["23964 TEU", "23964 TEU (with scrubber"]
@@ -149,11 +151,11 @@ bars = []  # To store bar elements for the legend
 
 # Plot stacked bars
 for category in categories:
-    bars.append(ax.bar(models, [base_percentages[category], lng_percentages[category]], 
+    bars.append(ax.bar(models, [base_percentages[category], scrubber_percentages[category]], 
                         width=bar_width, label=category, color=colors[category], bottom=bottom_base))
     
     # Update bottom values for stacking
-    bottom_base = [bottom_base[i] + val for i, val in enumerate([base_percentages[category], lng_percentages[category]])]
+    bottom_base = [bottom_base[i] + val for i, val in enumerate([base_percentages[category], scrubber_percentages[category]])]
 
 # Customize the chart
 ax.set_ylabel("Percentage (%)", fontsize=12)
