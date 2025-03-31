@@ -91,7 +91,7 @@ mpl.rcParams.update({
     'axes.labelsize': 12
 })
 
-# Provided data LNG == scrubber voor nu
+# No with chain
 data = {
     "MODEL_23964_BASE": {
         "Fuel_costs": {
