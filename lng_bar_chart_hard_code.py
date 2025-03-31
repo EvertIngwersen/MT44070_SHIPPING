@@ -91,7 +91,7 @@ mpl.rcParams.update({
     'axes.labelsize': 12
 })
 
-# No with chain
+# Now with chain
 data = {
     "MODEL_23964_BASE": {
         "Fuel_costs": {
