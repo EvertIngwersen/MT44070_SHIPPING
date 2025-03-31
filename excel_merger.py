@@ -9,21 +9,33 @@ import pandas as pd
 import glob
 import os
 
-# Get the current directory of the script
+# Get the current script directory
 script_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Path to the subfolder
 folder_path = os.path.join(script_dir, "MERGE_DATA")
 
-# Get all Excel files in the subfolder
-file_list = glob.glob(os.path.join(folder_path, "*.xlsx"))  # Change to "*.xls" if needed
+# Check if the folder exists
+if not os.path.exists(folder_path):
+    print(f"❌ ERROR: Folder {folder_path} does not exist.")
+    exit()
 
-# Read and merge all files
+# Get all Excel files in the folder
+file_list = glob.glob(os.path.join(folder_path, "*.xlsx"))
+
+# Debugging: Print found files
+print(f"📂 Found {len(file_list)} Excel files: {file_list}")
+
+# Check if any files were found
+if not file_list:
+    print("❌ ERROR: No Excel files found in MERGE_DATA.")
+    exit()
+
+# Read and merge files
 df_list = [pd.read_excel(file) for file in file_list]
 merged_df = pd.concat(df_list, ignore_index=True)
 
-# Save the merged file in the same directory as the script
+# Save merged file
 output_path = os.path.join(script_dir, "merged_output.xlsx")
 merged_df.to_excel(output_path, index=False)
 
-print(f"Merged file saved at: {output_path}")
+print(f"✅ Merged file saved at: {output_path}")
+
