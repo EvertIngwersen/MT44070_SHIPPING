@@ -113,7 +113,18 @@ data = {
             "ETS_cost_ship": 413617,
             "Cannel_cost_ship": 2053900
             }
+        },
+    "MODEL_23964_LNG": {
+        "Fuel_costs": {
+            "Fuel_cost_ship_ports": 202937.0,
+            "Fuel_cost_ship_ECA": 1728733.0,
+            "Fuel_cost_ship_NON_ECA": 24389368.0,
+            "Lub_oil_cost_ship": 27718.0,
+            "ETS_cost_ship": 413617,
+            "Cannel_cost_ship": 2053900
+            }
         }
+    
     }
             
 
@@ -126,9 +137,10 @@ def compute_percentages(model_data):
 # Compute percentages
 base_percentages = compute_percentages(data["MODEL_23964_BASE"])
 scrubber_percentages = compute_percentages(data["MODEL_23964_SCRUBBER"])
+LNG_percentages = compute_percentages(data["MODEL_23964_LNG"])
 
 # Define models, categories, and colors
-models = ["23964 TEU", "23964 TEU (with scrubber"]
+models = ["23964 TEU", "23964 TEU (with scrubber)","23964 TEU (LNG)" ]
 categories = ["Fuel_cost_ship_ports", "Fuel_cost_ship_ECA", "Fuel_cost_ship_NON_ECA", 
               "Lub_oil_cost_ship", "ETS_cost_ship", "Cannel_cost_ship"]
 colors = {
@@ -146,16 +158,16 @@ fig, ax = plt.subplots(figsize=(8, 6))
 plt.grid()
 
 # Initialize bottom values for stacking
-bottom_base = [0, 0]  # For 23964 TEU and 23964 TEU (LNG)
+bottom_base = [0, 0, 0]  # For 23964 TEU and 23964 TEU (LNG)
 bars = []  # To store bar elements for the legend
 
 # Plot stacked bars
 for category in categories:
-    bars.append(ax.bar(models, [base_percentages[category], scrubber_percentages[category]], 
+    bars.append(ax.bar(models, [base_percentages[category], scrubber_percentages[category], LNG_percentages[category]], 
                         width=bar_width, label=category, color=colors[category], bottom=bottom_base))
     
     # Update bottom values for stacking
-    bottom_base = [bottom_base[i] + val for i, val in enumerate([base_percentages[category], scrubber_percentages[category]])]
+    bottom_base = [bottom_base[i] + val for i, val in enumerate([base_percentages[category], scrubber_percentages[category], LNG_percentages[category]])]
 
 # Customize the chart
 ax.set_ylabel("Percentage (%)", fontsize=12)
@@ -165,7 +177,7 @@ ax.tick_params(axis='x', rotation=30, labelsize=10)
 ax.tick_params(axis='y', labelsize=10)
 
 # Add a proper legend with all cost categories
-ax.legend(title="Cost Components", loc="upper right", fontsize=10)
+ax.legend(title="Cost Components", loc="center left", bbox_to_anchor=(1, 0.5), fontsize=10)
 
 # Save the figure
 save_path = r"C:\Users\evert\Documents\TU-Delft\TIL Master\MT44070 Shipping Management\MT44070_REPO\MT44070_SHIPPING\Vessels_DATA\Plots\cost_breakdown.png"
